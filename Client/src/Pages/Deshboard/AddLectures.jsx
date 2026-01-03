@@ -47,7 +47,13 @@ function AddCourseLectures (){
             toast.error("All fields are mandatory")
             return;
         }
-        const response = await dispatch(addCourseLectures(userInput));
+        const formData = new FormData();
+        formData.append("lecture", userInput.lecture);
+        formData.append("title", userInput.title);
+        formData.append("description", userInput.description);
+        formData.append("id", userInput.id); // Ensure ID is passed if needed by the thunk
+
+        const response = await dispatch(addCourseLectures(formData));
         if(response?.payload?.success) {
             navigate(-1);
             setUserInput({
@@ -57,6 +63,8 @@ function AddCourseLectures (){
                 description: "",
                 videoSrc: ""
             })
+        } else {
+            toast.error(response?.payload?.message || "Something went wrong");
         }
     }
     useEffect(() => {

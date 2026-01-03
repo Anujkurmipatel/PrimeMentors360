@@ -26,6 +26,11 @@ import CheckoutSuccess from './Pages/Payment/CheckoutSuccess.jsx'
 import Signup from './Pages/Signup.jsx'
 import EditProfile from './Pages/User/EditProfile.jsx'
 import Profile from './Pages/User/Profile.jsx'
+import InstructorDashboard from './Pages/Deshboard/InstructorDashboard.jsx'
+import InstructorCreateCourse from './Pages/Deshboard/InstructorCreateCourse.jsx';
+import InstructorAddLecture from './Pages/Deshboard/InstructorAddLecture.jsx';
+import InstructorAddQuiz from './Pages/Deshboard/InstructorAddQuiz.jsx';
+
 
 function App() {
   return (
@@ -50,7 +55,17 @@ function App() {
            <Route path='/admin/deshboard' element={<AdminDeshboard/>}></Route>
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={["ADMIN", 'USER']}/>}>
+          <Route element={<RequireAuth allowedRoles={["ADMIN", "INSTRUCTOR"]}/>}> 
+                      {/* Instructor Panel Routes */}
+                      <Route element={<RequireAuth allowedRoles={['INSTRUCTOR']}/>}> 
+                        <Route path='/instructor/dashboard' element={<InstructorDashboard/>}></Route>
+                        <Route path='/instructor/create-course' element={<InstructorCreateCourse/>}></Route>
+                        <Route path='/instructor/add-lecture' element={<InstructorAddLecture/>}></Route>
+                        <Route path='/instructor/add-quiz' element={<InstructorAddQuiz/>}></Route>
+                        
+                        
+
+                      </Route>
             <Route path='/user/profile' element={<Profile/>}></Route> 
             <Route path='/user/editprofile' element={<EditProfile/>}></Route> 
             <Route path='/change-password' element={<ChangePassword/>}></Route>
@@ -59,6 +74,7 @@ function App() {
             <Route path='/checkout/fail' element={<CheckoutFailure/>}></Route>      
             <Route path='/course/displaylecture' element={<Displaylectures/>}></Route>
             <Route path='/course/edit' element={<EditCourse/>}></Route>
+            
           </Route>
                   
           <Route path='*' element={<NotFound/>}></Route>

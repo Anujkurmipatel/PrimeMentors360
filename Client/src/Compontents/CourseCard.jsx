@@ -1,41 +1,65 @@
 import { useNavigate } from "react-router-dom";
 
-function CourseCard({data}){
+function CourseCard({ data }) {
     const navigate = useNavigate();
 
-    return(
-        <div 
-            onClick={()=>navigate("/course/description/", {state:{...data}})}
-           className=" text-white w-[20rem] h-[400px] shadow-lg rounded cursor-pointer  group overflow-hidden">
-            <div className=" overflow-hidden">
+    return (
+        <div
+            onClick={() => navigate("/course/description/", { state: { ...data } })}
+            className="card w-80 bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer border-b-8 border-r-4 border-primary rounded-3xl overflow-hidden group"
+        >
+            {/* Image Area */}
+            <figure className="relative h-48 overflow-hidden">
                 <img
-                    className="h-48 w-full  rounded-tl-lg rounded-tr-lg group-hover:scale=[1,2] transition-all ease-in-out duration-300"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-in-out"
                     src={data?.thumbnail?.secure_url}
                     alt="course thumbnail"
                 />
-                <div className=" p-5 space-y-1  text-white">
-                    <h2  className=" text-xl font-bold text-yellow-500 line-clamp-2">
-                        {data?.title}
-                    </h2>
-                    <p className=" line-clamp-2">
-                        {data?.description}
-                    </p>
-                    <p className=" font-semibold">
-                        <span className=" text-yellow-500  font-bold">Category :</span>
-                        {data?.category}
-                    </p>
-                    {/* <p className=" font-semibold">
-                        <span className=" text-yellow-500  font-bold">Total lectures :</span>
-                        {data?.numberoflectures}
-                    </p> */}
-                    <p className=" font-semibold">
-                        <span className=" text-yellow-500  font-bold">Instructor :</span>
-                        {data?.createdBy}
-                    </p>
+                
+                {/* "Category" Badge as a sticker on the image */}
+                <div className="absolute top-3 right-3 badge badge-secondary badge-lg font-bold shadow-md rotate-3">
+                    {data?.category}
+                </div>
+            </figure>
+
+            {/* Content Area */}
+            <div className="card-body p-5 gap-1">
+                
+                {/* Title */}
+                <h2 className="card-title text-primary font-black text-2xl mb-1 line-clamp-1">
+                    {data?.title}
+                    {/* New badge if relevant (optional logic) */}
+                    <div className="badge badge-accent badge-sm text-xs">NEW</div>
+                </h2>
+
+                {/* Instructor (Small and friendly) */}
+                <div className="flex items-center gap-2 text-sm text-gray-500 font-bold mb-2">
+                    <span className="bg-base-200 p-1 rounded-full">🎓</span> 
+                    <span>Teacher: <span className="text-secondary">{data?.createdBy}</span></span>
+                </div>
+
+                {/* Description */}
+                <p className="text-base-content/70 text-sm line-clamp-2 font-medium leading-relaxed">
+                    {data?.description}
+                </p>
+
+                {/* "Total Lectures" or Action Area */}
+                <div className="card-actions justify-end mt-4 items-center">
+                    {/* Optional: Show lectures count if you want */}
+                    {data?.numberoflectures > 0 && (
+                        <div className="badge badge-outline font-bold mr-auto">
+                            📺 {data?.numberoflectures} Lessons
+                        </div>
+                    )}
+                    
+                    {/* Big Friendly Button */}
+                    <button className="btn btn-primary btn-sm rounded-full px-6 text-white shadow-md group-hover:btn-secondary transition-colors">
+                        Start 🚀
+                    </button>
                 </div>
             </div>
         </div>
     );
-
 }
+
 export default CourseCard;

@@ -16,7 +16,7 @@ router.route('/')
     )
     .post(
             isLoggedIn,
-            authorizedRoles('ADMIN'),
+            authorizedRoles('ADMIN', 'INSTRUCTOR'),
             upload.single('thumbnail'), 
            createCourse
         );
@@ -29,25 +29,27 @@ router.route('/:id')
     .get(
         isLoggedIn ,
         // authorizedSubscriber,
-        authorizedRoles('ADMIN'),
+        authorizedRoles('ADMIN','INSTRUCTOR'),
         getLecturesByCourseId
     )
     .put(
         isLoggedIn,
-        authorizedRoles('ADMIN'),
+        authorizedRoles('ADMIN','INSTRUCTOR'),
         updateCourse
     )
     .delete(
         isLoggedIn,
-        authorizedRoles('ADMIN'),
+        authorizedRoles('ADMIN','INSTRUCTOR'),
         removeCourse
     )
     .post(
         isLoggedIn,
-        authorizedRoles('ADMIN'),
+        authorizedRoles('ADMIN','INSTRUCTOR'),
         upload.single('lecture'), 
         addLectureToCourseById
     );
+
+ 
     /**
  * @route DELETE /courses/:courseId/lectures/:lectureId
  * @description Remove a specific lecture from a course

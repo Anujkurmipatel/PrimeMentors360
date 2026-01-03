@@ -32,7 +32,7 @@ function AdminDeshboard(){
             {
                 label:"User Details",
                 data:[allUsersCount,subscribedCount],
-                backgroundColor:["yellow","green"],
+                backgroundColor:["yellow","green"], 
                 borderWidth:1,
                 borderColor:["yellow", "green"]
             }

@@ -25,22 +25,26 @@ function Login(){
         })
     }
 
-   async function onLogin(event){
+    async function onLogin(event) {
         event.preventDefault();
         if (!loginData.email || !loginData.password) {
             toast.error("Please fill all the details ");
             return;
         }
-
-
         //dispatch create account action
-       const response = await dispatch(login(loginData));
-        if(response?.payload?.success){
-            navigate("/");
+        const response = await dispatch(login(loginData));
+        if (response?.payload?.success) {
+            // Check user role for redirection
+            const userRole = response?.payload?.user?.role || response?.payload?.role;
+            if (userRole === "INSTRUCTOR") {
+                navigate("/instructor/dashboard");
+            } else {
+                navigate("/");
+            }
             setloginData({
-                email:"",
-                password:"",
-            })
+                email: "",
+                password: "",
+            });
         }
     }
     return(

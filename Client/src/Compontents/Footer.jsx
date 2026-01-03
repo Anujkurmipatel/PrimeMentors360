@@ -1,31 +1,45 @@
-import {BsFacebook, BsInstagram,BsLinkedin, BsTwitter} from 'react-icons/bs';
+import { BsFacebook, BsInstagram, BsLinkedin, BsTwitter } from 'react-icons/bs';
 
-function Footer(){
+function Footer() {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
 
-    return(
-        <>
-            <footer className=' relative left-0 bottom-0 sm:h-[10vh] h-[15vh] py-5 sm:px-20  sm:pb-2 flex flex-col sm:flex-row items-center justify-between text-white bg-gray-900'>
-                <section>
-                        Copyright {year} | All rights resvered
-                </section>
-                <section className='flex  items-center justify-center gap-5 text-2xl text-white'>
-                    <a className=' hover:text-yellow-500 transition-all ease-in-out duration-300'>
-                        <BsFacebook/>
-                    </a>
-                    <a className=' hover:text-yellow-500 transition-all ease-in-out duration-300'>
-                        <BsInstagram/>
-                    </a>
-                    <a className=' hover:text-yellow-500 transition-all ease-in-out duration-300'>
-                        <BsLinkedin/>
-                    </a>
-                    <a className=' hover:text-yellow-500 transition-all ease-in-out duration-300'>
-                        <BsTwitter/>
-                    </a>
-                </section>
-            </footer>
-        </>
-    )
+    return (
+        // "mt-auto" ensures footer stays at bottom even if content is short
+        // "rounded-t-3xl" gives the playful curved top edge
+        <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded-t-3xl mt-auto shadow-inner">
+            
+            {/* Social Media Section */}
+            <div className="grid grid-flow-col gap-6">
+                
+                <a className="btn btn-ghost btn-circle text-3xl text-blue-600 hover:bg-blue-100 hover:scale-110 transition-all duration-300">
+                    <BsFacebook />
+                </a>
+                
+                <a className="btn btn-ghost btn-circle text-3xl text-pink-500 hover:bg-pink-100 hover:scale-110 transition-all duration-300">
+                    <BsInstagram />
+                </a>
+                
+                <a className="btn btn-ghost btn-circle text-3xl text-blue-700 hover:bg-blue-100 hover:scale-110 transition-all duration-300">
+                    <BsLinkedin />
+                </a>
+                
+                <a className="btn btn-ghost btn-circle text-3xl text-sky-400 hover:bg-sky-100 hover:scale-110 transition-all duration-300">
+                    <BsTwitter />
+                </a>
+            </div>
+
+            {/* Copyright Text */}
+            <div>
+                <p className="font-bold text-lg text-primary opacity-80">
+                    Copyright © {year} - All rights reserved
+                </p>
+                <p className="text-sm font-medium text-secondary">
+                    🚀 Learning made fun!
+                </p>
+            </div>
+        </footer>
+    );
 }
+
 export default Footer;

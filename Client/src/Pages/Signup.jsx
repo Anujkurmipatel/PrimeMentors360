@@ -1,6 +1,7 @@
 import { useState } from "react";
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast';
 import { BsPersonCircle } from "react-icons/bs";
+import { FaUser, FaEnvelope, FaLock, FaCamera, FaRocket } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -8,71 +9,64 @@ import { isEmail, isPassword } from "../Helpers/regexMatcher";
 import HomeLayout from "../Layouts/HomeLayout";
 import { creatAccount } from "../Redux/Slices/AuthSlice";
 
-function Signup(){
+function Signup() {
 
     const dispatch = useDispatch();
-   const navigate = useNavigate();
+    const navigate = useNavigate();
 
+    const [prevImage, setPrevImage] = useState("");
 
-    const [prevImage, setPrevImage]=useState("");
-
-    const [signupData, setSignupData]=useState({
-        fullName:"",
-        email:"",
-        password:"",
-        avatar:"",
+    const [signupData, setSignupData] = useState({
+        fullName: "",
+        email: "",
+        password: "",
+        avatar: "",
     });
 
-    function handleUserInput(e){
-        const{name, value}=e.target;
+    function handleUserInput(e) {
+        const { name, value } = e.target;
         setSignupData({
             ...signupData,
-            [name]:value
+            [name]: value
         })
     }
 
-    function getImage(event){
+    function getImage(event) {
         event.preventDefault();
-
-        //getting image
         const uploadedImage = event.target.files[0];
 
-        if(uploadedImage){
-           setSignupData({
+        if (uploadedImage) {
+            setSignupData({
                 ...signupData,
-                avatar:uploadedImage
-           });
-           const fileReader =new FileReader();
-           fileReader.readAsDataURL(uploadedImage);
-           fileReader.addEventListener("load", function(){
-                 console.log(this.result);
+                avatar: uploadedImage
+            });
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(uploadedImage);
+            fileReader.addEventListener("load", function () {
                 setPrevImage(this.result);
-           })   
+            })
         }
     }
 
-   async function createNewAccount(event){
+    async function createNewAccount(event) {
         event.preventDefault();
-        if (!signupData.email ||!signupData.fullName||!signupData.avatar || !signupData.password) {
-            toast.error("Please fill all the details ");
+        if (!signupData.email || !signupData.fullName || !signupData.avatar || !signupData.password) {
+            toast.error("Please fill all the details");
             return;
         }
 
-        //checking name filed 
-        if(signupData.fullName.length<5){
-            toast.error("Name should be atleast of 5characters ")
+        if (signupData.fullName.length < 5) {
+            toast.error("Name should be atleast 5 characters");
             return;
         }
 
-        //email vaildtaion 
         if (!isEmail(signupData.email)) {
-            toast.error("Invaild email id  ")
+            toast.error("Invalid email id");
             return;
         }
 
-        //checking password
-        if(!isPassword(signupData.password)){
-            toast.error("Password should be 6 - 16 character long with atleast a number and special character");
+        if (!isPassword(signupData.password)) {
+            toast.error("Password should be 6-16 characters with at least a number and special character");
             return;
         }
 
@@ -82,92 +76,144 @@ function Signup(){
         formData.append("password", signupData.password);
         formData.append("avatar", signupData.avatar);
 
-
-        //dispatch create account action
-       const response = await dispatch(creatAccount(formData));
-        if(response?.payload?.success){
+        const response = await dispatch(creatAccount(formData));
+        if (response?.payload?.success) {
             navigate("/");
             setSignupData({
-                fullName:"",
-                email:"",
-                password:"",
-                avatar:"",
+                fullName: "",
+                email: "",
+                password: "",
+                avatar: "",
             })
             setPrevImage("");
         }
     }
-    return(
+
+    return (
         <HomeLayout>
-                <div className=" flex items-center justify-center h-[90vh]">
-                    <form  noValidate onSubmit={createNewAccount} className="flex flex-col   justify-center gap-3  rounded-lg text-white p-4 w-80  shadow-[0_0_10px_black] ">
-                        <h1 className="text-center text-2xl font-bold">Registion Page</h1>
-                        <label htmlFor="image_uploads" className=" cursor-pointer">
-                            {prevImage ? (
-                               < img  className="w-24 h-24 rounded-full m-auto" src={prevImage}  />
-                               ) : (
-                                    <BsPersonCircle className="w-24 h-24 rounded-full m-auto"/>
-                            ) }
+            <div className="flex items-center justify-center min-h-screen bg-base-200 px-4 py-10">
+                
+                {/* Registration Card */}
+                <form 
+                    noValidate 
+                    onSubmit={createNewAccount} 
+                    className="card w-full max-w-md bg-base-100 shadow-xl border-4 border-dashed border-primary/30 p-8"
+                >
+                    
+                    {/* Header */}
+                    <div className="text-center mb-6">
+                        <h1 className="text-3xl font-black text-primary">Join the Squad! 🚀</h1>
+                        <p className="text-base-content/60 font-medium">Create your hero profile</p>
+                    </div>
+
+                    {/* Avatar Upload Section */}
+                    <div className="flex justify-center mb-6">
+                        <label htmlFor="image_uploads" className="cursor-pointer group relative">
+                            <div className="w-28 h-28 rounded-full border-4 border-secondary overflow-hidden shadow-lg group-hover:scale-105 transition-transform bg-base-200 flex items-center justify-center">
+                                {prevImage ? (
+                                    <img 
+                                        className="w-full h-full object-cover" 
+                                        src={prevImage} 
+                                        alt="Avatar Preview" 
+                                    />
+                                ) : (
+                                    <BsPersonCircle className="w-20 h-20 text-base-content/30" />
+                                )}
+                            </div>
+                            
+                            {/* Camera Overlay Icon */}
+                            <div className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full shadow-md hover:bg-primary-focus transition-colors">
+                                <FaCamera size={16} />
+                            </div>
                         </label>
-                        <input 
+                        <input
                             className="hidden"
                             type="file"
                             name="image_uploads"
                             id="image_uploads"
-                            accept=".jpg, .jpeg , .png ,.svg"
+                            accept=".jpg, .jpeg, .png, .svg"
                             onChange={getImage}
                         />
+                    </div>
 
-                        <div className="flex flex-col gap-1">
-                            <label htmlFor="fullName" className="font-semibold">Name</label>
-                            <input 
+                    {/* Inputs Container */}
+                    <div className="flex flex-col gap-4">
+                        
+                        {/* Name Input */}
+                        <div className="form-control w-full">
+                            <label className="label py-1" htmlFor="fullName">
+                                <span className="label-text font-bold text-secondary flex items-center gap-2">
+                                    <FaUser /> Name
+                                </span>
+                            </label>
+                            <input
                                 type="text"
                                 required
                                 name="fullName"
                                 id="fullName"
-                                placeholder="Enter your FullName...."
-                                className=" bg-transparent px-2 py-1 border"
+                                placeholder="Enter your full name..."
+                                className="input input-bordered input-primary w-full rounded-full bg-base-200 focus:bg-white"
                                 onChange={handleUserInput}
                                 value={signupData.fullName}
-                             />
+                            />
                         </div>
 
-                        <div className="flex flex-col gap-1">
-                            <label htmlFor="email" className="font-semibold">Email</label>
-                            <input 
+                        {/* Email Input */}
+                        <div className="form-control w-full">
+                            <label className="label py-1" htmlFor="email">
+                                <span className="label-text font-bold text-secondary flex items-center gap-2">
+                                    <FaEnvelope /> Email
+                                </span>
+                            </label>
+                            <input
                                 type="email"
                                 required
                                 name="email"
                                 id="email"
-                                placeholder="Enter your email...."
-                                className=" bg-transparent px-2 py-1 border"
+                                placeholder="Enter your email..."
+                                className="input input-bordered input-primary w-full rounded-full bg-base-200 focus:bg-white"
                                 onChange={handleUserInput}
                                 value={signupData.email}
-                             />
+                            />
                         </div>
 
-                        <div className="flex flex-col gap-1">
-                            <label htmlFor="password" className="font-semibold">Password</label>
-                            <input 
+                        {/* Password Input */}
+                        <div className="form-control w-full">
+                            <label className="label py-1" htmlFor="password">
+                                <span className="label-text font-bold text-secondary flex items-center gap-2">
+                                    <FaLock /> Password
+                                </span>
+                            </label>
+                            <input
                                 type="password"
                                 required
                                 name="password"
                                 id="password"
-                                placeholder="Enter your password...."
-                                className=" bg-transparent px-2 py-1 border"
+                                placeholder="Create a secret password..."
+                                className="input input-bordered input-primary w-full rounded-full bg-base-200 focus:bg-white"
                                 onChange={handleUserInput}
                                 value={signupData.password}
-                             />
+                            />
                         </div>
-                        <button  type="submit" className=" mt-2 bg-yellow-600 hover:bg-yellow-500 py-2 font-semibold text-lg cursor-pointer transition-all ease-in-out duration-300  rounded-sm">
-                                Create Account
-                        </button>
-                        <p className="text-center">
-                            Already have an account ? <Link to="/login" className=" link  text-accent cursor-pointer">Login</Link>
-                        </p>
 
-                    </form>
-                </div>
+                        {/* Submit Button */}
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary w-full rounded-full mt-4 text-white text-lg shadow-lg hover:-translate-y-1 transition-transform"
+                        >
+                            Start Adventure <FaRocket />
+                        </button>
+
+                        {/* Login Link */}
+                        <p className="text-center mt-2 text-sm font-semibold text-base-content/70">
+                            Already a member? <Link to="/login" className="link link-primary font-bold">Login here</Link>
+                        </p>
+                    </div>
+
+                </form>
+            </div>
         </HomeLayout>
     )
 }
+
 export default Signup;
